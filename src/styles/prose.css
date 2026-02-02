@@ -1,0 +1,55 @@
+.prose {
+	max-width: 720px;
+}
+
+.prose > :first-child {
+	margin-top: 0;
+}
+
+.prose :where(p, ul, ol, pre, blockquote) {
+	margin: 0 0 1em;
+}
+
+.prose :where(ul, ol) {
+	padding-left: 1.25em;
+}
+
+.prose :where(h2) {
+	margin: 1.4em 0 0.6em;
+	font-size: 22px;
+}
+
+.prose :where(h3) {
+	margin: 1.2em 0 0.5em;
+	font-size: 18px;
+}
+
+.prose :where(a) {
+	color: var(--link);
+}
+
+.prose :where(code) {
+	font-family:
+		ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
+		monospace;
+	font-size: 0.95em;
+	background: color-mix(in srgb, var(--panel) 92%, var(--text) 8%);
+	border: 1px solid var(--border);
+	padding: 0.1em 0.3em;
+	border-radius: 6px;
+}
+
+.prose :where(pre) {
+	overflow: auto;
+	padding: 14px 16px;
+	border-radius: var(--radius);
+	border: 1px solid var(--border);
+	background: var(--panel);
+}
+
+.prose :where(pre code) {
+	border: 0;
+	background: transparent;
+	padding: 0;
+}
+

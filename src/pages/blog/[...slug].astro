@@ -34,7 +34,7 @@ const published = new Intl.DateTimeFormat('en-US', { dateStyle: 'long' }).format
 			) : null}
 		</header>
 
-		<div class="content">
+		<div class="prose">
 			<Content />
 		</div>
 	</article>
@@ -79,38 +79,4 @@ const published = new Intl.DateTimeFormat('en-US', { dateStyle: 'long' }).format
 		padding: 4px 10px;
 		border-radius: 999px;
 	}
-
-	.content :global(p) {
-		line-height: 1.7;
-	}
-
-	.content :global(a) {
-		color: var(--link);
-	}
-
-	.content :global(code) {
-		font-family:
-			ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
-			monospace;
-		font-size: 0.95em;
-		background: color-mix(in srgb, var(--panel) 90%, var(--text) 10%);
-		border: 1px solid var(--border);
-		padding: 0.1em 0.3em;
-		border-radius: 6px;
-	}
-
-	.content :global(pre) {
-		overflow: auto;
-		padding: 14px 16px;
-		border-radius: 14px;
-		border: 1px solid var(--border);
-		background: var(--panel);
-	}
-
-	.content :global(pre code) {
-		border: 0;
-		background: transparent;
-		padding: 0;
-	}
 </style>
-
