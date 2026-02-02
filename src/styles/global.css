@@ -1,23 +1,27 @@
 :root {
 	color-scheme: light dark;
-	--bg: #f8fafc;
-	--panel: #ffffff;
-	--text: #0f172a;
-	--muted: #475569;
-	--border: rgba(15, 23, 42, 0.12);
-	--link: #1d4ed8;
+	--bg: #fbfaf7;
+	--panel: transparent;
+	--text: #121212;
+	--muted: #3f3f3f;
+	--border: rgba(18, 18, 18, 0.18);
+	--link: #121212;
 	--radius: 14px;
 	--maxw: 920px;
+	--max-prose: 68ch;
+	--font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+		Helvetica, Arial;
+	--font-serif: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
 }
 
 @media (prefers-color-scheme: dark) {
 	:root {
-		--bg: #0b0c0f;
-		--panel: #111827;
-		--text: rgba(255, 255, 255, 0.92);
-		--muted: rgba(255, 255, 255, 0.68);
-		--border: rgba(255, 255, 255, 0.12);
-		--link: #93c5fd;
+		--bg: #0f1011;
+		--panel: transparent;
+		--text: rgba(255, 255, 255, 0.93);
+		--muted: rgba(255, 255, 255, 0.72);
+		--border: rgba(255, 255, 255, 0.16);
+		--link: rgba(255, 255, 255, 0.93);
 	}
 }
 
@@ -35,12 +39,11 @@ body {
 }
 
 body {
-	font-family:
-		ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
-		Arial;
+	font-family: var(--font-serif);
+	font-size: 18px;
 	background: var(--bg);
 	color: var(--text);
-	line-height: 1.6;
+	line-height: 1.8;
 	text-rendering: optimizeLegibility;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
@@ -48,14 +51,26 @@ body {
 
 a {
 	color: var(--link);
+	text-decoration-thickness: 1px;
+	text-underline-offset: 3px;
+}
+
+.site-header a:focus-visible,
+.main a:focus-visible {
+	outline: 2px solid color-mix(in srgb, var(--text) 70%, transparent);
+	outline-offset: 3px;
+	border-radius: 6px;
+}
+
+.site-header {
+	font-family: var(--font-sans);
 }
 
 .site-header {
 	position: sticky;
 	top: 0;
 	z-index: 10;
-	background: color-mix(in srgb, var(--bg) 92%, transparent);
-	backdrop-filter: blur(10px);
+	background: var(--bg);
 	border-bottom: 1px solid var(--border);
 }
 
@@ -109,3 +124,24 @@ h2 {
 	letter-spacing: -0.01em;
 }
 
+::selection {
+	background: color-mix(in srgb, var(--text) 20%, transparent);
+}
+
+@media (max-width: 520px) {
+	body {
+		font-size: 17px;
+	}
+
+	h1 {
+		font-size: 30px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	* {
+		scroll-behavior: auto !important;
+		transition: none !important;
+		animation: none !important;
+	}
+}

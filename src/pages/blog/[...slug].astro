@@ -45,7 +45,8 @@ const published = new Intl.DateTimeFormat('en-US', { dateStyle: 'long' }).format
 
 <style>
 	.post {
-		max-width: 720px;
+		max-width: var(--max-prose);
+		margin: 0 auto;
 	}
 
 	.header {
@@ -55,14 +56,15 @@ const published = new Intl.DateTimeFormat('en-US', { dateStyle: 'long' }).format
 	.title {
 		margin: 0 0 10px;
 		letter-spacing: -0.02em;
-		font-size: 36px;
-		line-height: 1.15;
+		font-size: 42px;
+		line-height: 1.2;
 	}
 
 	.meta {
 		margin: 0 0 12px;
 		color: var(--muted);
 		font-size: 14px;
+		font-family: var(--font-sans);
 	}
 
 	.tags {
@@ -75,5 +77,11 @@ const published = new Intl.DateTimeFormat('en-US', { dateStyle: 'long' }).format
 
 	.tag {
 		list-style: none;
+	}
+
+	@media (max-width: 520px) {
+		.title {
+			font-size: 34px;
+		}
 	}
 </style>

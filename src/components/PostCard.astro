@@ -40,14 +40,11 @@ const published = new Intl.DateTimeFormat('en-US', { dateStyle: 'medium' }).form
 		border: 1px solid var(--border);
 		border-radius: 14px;
 		background: var(--panel);
-		transition:
-			border-color 0.15s ease,
-			transform 0.15s ease;
+		transition: border-color 0.15s ease;
 	}
 
 	.inner:hover {
 		border-color: color-mix(in srgb, var(--border) 55%, var(--text) 45%);
-		transform: translateY(-1px);
 	}
 
 	.title {
@@ -71,6 +68,7 @@ const published = new Intl.DateTimeFormat('en-US', { dateStyle: 'medium' }).form
 		margin: 0 0 10px;
 		font-size: 13px;
 		color: var(--muted);
+		font-family: var(--font-sans);
 	}
 
 	.tags {
