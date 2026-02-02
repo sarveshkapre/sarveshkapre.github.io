@@ -1,20 +1,19 @@
-import rss from '@astrojs/rss';
-import { getCollection } from 'astro:content';
+import rss from "@astrojs/rss";
+import { getAllPosts } from "@/data/post";
+import { siteConfig } from "@/site.config";
 
-export async function GET(context: { site: URL }) {
-	const posts = await getCollection('blog', ({ data }) => import.meta.env.DEV || !data.draft);
-	posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+export const GET = async () => {
+	const posts = await getAllPosts();
 
 	return rss({
-		title: 'Sarvesh Kapre',
-		description: 'Blog posts by Sarvesh Kapre.',
-		site: context.site,
+		title: siteConfig.title,
+		description: siteConfig.description,
+		site: import.meta.env.SITE,
 		items: posts.map((post) => ({
 			title: post.data.title,
-			pubDate: post.data.pubDate,
 			description: post.data.description,
-			link: `/blog/${post.slug}/`,
+			pubDate: post.data.publishDate,
+			link: `posts/${post.id}/`,
 		})),
 	});
-}
-
+};

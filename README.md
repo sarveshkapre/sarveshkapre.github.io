@@ -1,11 +1,12 @@
 # sarveshkapre.github.io
 
-Personal site + blog built with Astro.
+Personal site + blog built with Astro (Astro Cactus template).
 
 ## Writing
 
-- Add posts in `src/content/blog/*.md`
-- Blog index: `/blog/`
+- Add posts in `src/content/post/*.md`
+- Blog index: `/posts/`
+- Tags: `/tags/`
 - RSS feed: `/rss.xml`
 
 ## Dev
@@ -15,7 +16,7 @@ Personal site + blog built with Astro.
 
 ## Build
 
-- `npm run build` (outputs to `dist/`)
+- `npm run build` (outputs to `dist/`, also builds Pagefind search)
 - `npm run preview`
 
 ## Deploy

@@ -1,87 +1,30 @@
 ---
-import type { CollectionEntry } from 'astro:content';
-import { getCollection } from 'astro:content';
-import Layout from '../../layouts/Layout.astro';
-import TagPill from '../../components/TagPill.astro';
+import type { GetStaticPaths } from "astro";
+import { getAllPosts } from "@/data/post";
 
-export async function getStaticPaths() {
-	const posts = await getCollection('blog', ({ data }) => import.meta.env.DEV || !data.draft);
-	return posts.map((post) => ({
-		params: { slug: post.slug },
-		props: { post },
-	}));
-}
+export const prerender = true;
 
-type Props = {
-	post: CollectionEntry<'blog'>;
-};
+export const getStaticPaths = (async () => {
+	const posts = await getAllPosts();
+	return posts.map((post) => ({ params: { slug: post.id } }));
+}) satisfies GetStaticPaths;
 
-const { post } = Astro.props as Props;
-const { Content } = await post.render();
-const published = new Intl.DateTimeFormat('en-US', { dateStyle: 'long' }).format(post.data.pubDate);
+const { slug } = Astro.params;
+const to = `/posts/${slug}/`;
 ---
 
-<Layout title={post.data.title} description={post.data.description}>
-	<article class="post">
-		<header class="header">
-			<h1 class="title">{post.data.title}</h1>
-			<p class="meta">{published}</p>
-			{post.data.tags.length > 0 ? (
-				<ul class="tags">
-					{post.data.tags.map((tag) => (
-						<li class="tag">
-							<TagPill tag={tag} />
-						</li>
-					))}
-				</ul>
-			) : null}
-		</header>
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="refresh" content={`0; url=${to}`} />
+		<meta name="robots" content="noindex" />
+		<link rel="canonical" href={to} />
+		<meta name="viewport" content="width=device-width" />
+		<title>Redirecting…</title>
+	</head>
+	<body>
+		<p>Redirecting to <a href={to}>{to}</a>…</p>
+	</body>
+</html>
 
-		<div class="prose">
-			<Content />
-		</div>
-	</article>
-</Layout>
-
-<style>
-	.post {
-		max-width: var(--max-prose);
-		margin: 0 auto;
-	}
-
-	.header {
-		margin: 8px 0 20px;
-	}
-
-	.title {
-		margin: 0 0 10px;
-		letter-spacing: -0.02em;
-		font-size: 42px;
-		line-height: 1.2;
-	}
-
-	.meta {
-		margin: 0 0 12px;
-		color: var(--muted);
-		font-size: 14px;
-		font-family: var(--font-sans);
-	}
-
-	.tags {
-		display: flex;
-		gap: 8px;
-		flex-wrap: wrap;
-		padding: 0;
-		margin: 0;
-	}
-
-	.tag {
-		list-style: none;
-	}
-
-	@media (max-width: 520px) {
-		.title {
-			font-size: 34px;
-		}
-	}
-</style>

@@ -1,64 +1,76 @@
 ---
-import { getCollection } from 'astro:content';
-import Layout from '../layouts/Layout.astro';
-import PostCard from '../components/PostCard.astro';
+import { type CollectionEntry, getCollection } from "astro:content";
+import PostPreview from "@/components/blog/PostPreview.astro";
+import Note from "@/components/note/Note.astro";
+import SocialList from "@/components/SocialList.astro";
+import { getAllPosts } from "@/data/post";
+import PageLayout from "@/layouts/Base.astro";
+import { collectionDateSort } from "@/utils/date";
 
-const posts = await getCollection('blog', ({ data }) => import.meta.env.DEV || !data.draft);
-posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-const latest = posts.slice(0, 3);
+// Posts
+const MAX_POSTS = 10;
+const allPosts = await getAllPosts();
+const allPostsByDate = allPosts.sort(collectionDateSort) as CollectionEntry<"post">[];
+const latestPosts = allPostsByDate.slice(0, MAX_POSTS);
+
+// Pinned Posts, set to a max of 3;
+const MAX_PINNED_POSTS = 3;
+const pinnedPosts = allPostsByDate.filter((p) => p.data.pinned).slice(0, MAX_PINNED_POSTS);
+
+// Notes
+const MAX_NOTES = 5;
+const allNotes = await getCollection("note");
+const latestNotes = allNotes
+	.sort(collectionDateSort)
+	.slice(0, MAX_NOTES) as CollectionEntry<"note">[];
 ---
 
-<Layout title="Sarvesh Kapre" description="Writing about what I’m building and learning.">
-	<h1>Hi, I’m Sarvesh.</h1>
-	<p class="lede">I write about what I’m building and learning.</p>
-
-	<section class="section">
-		<div class="row">
-			<h2 class="h2">Latest posts</h2>
-			<a class="more" href="/blog/">View all</a>
-		</div>
-		<ul class="list">
-			{latest.map((post) => <PostCard post={post} />)}
+<PageLayout meta={{ title: "Home" }}>
+	<section>
+		<h1 class="title mb-12">Hi, I’m Sarvesh.</h1>
+		<p class="mb-4">I write about what I’m building and learning.</p>
+		<SocialList />
+	</section>
+	{
+		pinnedPosts.length > 0 && (
+			<section class="mt-16">
+				<h2 class="title mb-6 text-xl">Pinned Posts</h2>
+				<ul class="space-y-4" role="list">
+					{pinnedPosts.map((p) => (
+						<li class="grid gap-1 sm:grid-cols-[auto_1fr]">
+							<PostPreview post={p} />
+						</li>
+					))}
+				</ul>
+			</section>
+		)
+	}
+	<section class="mt-16">
+		<h2 class="title text-accent mb-6 text-xl"><a href="/posts/">Posts</a></h2>
+		<ul class="space-y-4" role="list">
+			{
+				latestPosts.map((p) => (
+					<li class="grid gap-1 sm:grid-cols-[auto_1fr]">
+						<PostPreview post={p} />
+					</li>
+				))
+			}
 		</ul>
 	</section>
-</Layout>
-
-<style>
-	.lede {
-		margin: 0 0 18px;
-		color: var(--muted);
+	{
+		latestNotes.length > 0 && (
+			<section class="mt-16">
+				<h2 class="title text-accent mb-6 text-xl">
+					<a href="/notes/">Notes</a>
+				</h2>
+				<ul class="space-y-6" role="list">
+					{latestNotes.map((note) => (
+						<li>
+							<Note note={note} as="h3" isPreview />
+						</li>
+					))}
+				</ul>
+			</section>
+		)
 	}
-
-	.section {
-		margin-top: 22px;
-	}
-
-	.row {
-		display: flex;
-		align-items: baseline;
-		justify-content: space-between;
-		gap: 16px;
-		margin-bottom: 10px;
-	}
-
-	.h2 {
-		margin: 0;
-		font-size: 18px;
-	}
-
-	.more {
-		color: var(--muted);
-		text-decoration: none;
-	}
-
-	.more:hover {
-		color: var(--text);
-	}
-
-	.list {
-		display: grid;
-		gap: 12px;
-		padding: 0;
-		margin: 0;
-	}
-</style>
+</PageLayout>
