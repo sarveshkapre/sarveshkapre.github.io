@@ -1,0 +1,62 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+type Props = {
+	post: CollectionEntry<'blog'>;
+};
+
+const { post } = Astro.props as Props;
+
+const published = new Intl.DateTimeFormat('en-US', { dateStyle: 'medium' }).format(post.data.pubDate);
+---
+
+<li class="card">
+	<a class="link" href={`/blog/${post.slug}/`}>
+		<h2 class="title">{post.data.title}</h2>
+		<p class="meta">{published}</p>
+		<p class="desc">{post.data.description}</p>
+	</a>
+</li>
+
+<style>
+	.card {
+		list-style: none;
+	}
+
+	.link {
+		display: block;
+		padding: 14px 16px;
+		border: 1px solid var(--border);
+		border-radius: 14px;
+		text-decoration: none;
+		color: inherit;
+		background: var(--panel);
+		transition:
+			border-color 0.15s ease,
+			transform 0.15s ease;
+	}
+
+	.link:hover {
+		border-color: color-mix(in srgb, var(--border) 55%, var(--text) 45%);
+		transform: translateY(-1px);
+	}
+
+	.title {
+		margin: 0 0 6px;
+		font-size: 18px;
+		letter-spacing: -0.01em;
+	}
+
+	.meta {
+		margin: 0 0 10px;
+		font-size: 13px;
+		color: var(--muted);
+	}
+
+	.desc {
+		margin: 0;
+		color: var(--muted);
+		line-height: 1.5;
+	}
+</style>
+

@@ -1,0 +1,32 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import PostCard from '../../components/PostCard.astro';
+
+const posts = await getCollection('blog', ({ data }) => import.meta.env.DEV || !data.draft);
+posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<Layout title="Blog" description="Writing about what I’m building and learning.">
+	<h1>Blog</h1>
+	<p class="lede">Writing about what I’m building and learning.</p>
+
+	<ul class="list">
+		{posts.map((post) => <PostCard post={post} />)}
+	</ul>
+</Layout>
+
+<style>
+	.lede {
+		margin: 0 0 18px;
+		color: var(--muted);
+	}
+
+	.list {
+		display: grid;
+		gap: 12px;
+		padding: 0;
+		margin: 0;
+	}
+</style>
+

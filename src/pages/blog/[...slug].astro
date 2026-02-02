@@ -1,0 +1,116 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+	const posts = await getCollection('blog', ({ data }) => import.meta.env.DEV || !data.draft);
+	return posts.map((post) => ({
+		params: { slug: post.slug },
+		props: { post },
+	}));
+}
+
+type Props = {
+	post: CollectionEntry<'blog'>;
+};
+
+const { post } = Astro.props as Props;
+const { Content } = await post.render();
+const published = new Intl.DateTimeFormat('en-US', { dateStyle: 'long' }).format(post.data.pubDate);
+---
+
+<Layout title={post.data.title} description={post.data.description}>
+	<article class="post">
+		<header class="header">
+			<h1 class="title">{post.data.title}</h1>
+			<p class="meta">{published}</p>
+			{post.data.tags.length > 0 ? (
+				<ul class="tags">
+					{post.data.tags.map((tag) => (
+						<li class="tag">{tag}</li>
+					))}
+				</ul>
+			) : null}
+		</header>
+
+		<div class="content">
+			<Content />
+		</div>
+	</article>
+</Layout>
+
+<style>
+	.post {
+		max-width: 720px;
+	}
+
+	.header {
+		margin: 8px 0 20px;
+	}
+
+	.title {
+		margin: 0 0 10px;
+		letter-spacing: -0.02em;
+		font-size: 36px;
+		line-height: 1.15;
+	}
+
+	.meta {
+		margin: 0 0 12px;
+		color: var(--muted);
+		font-size: 14px;
+	}
+
+	.tags {
+		display: flex;
+		gap: 8px;
+		flex-wrap: wrap;
+		padding: 0;
+		margin: 0;
+	}
+
+	.tag {
+		list-style: none;
+		font-size: 12px;
+		color: var(--muted);
+		border: 1px solid var(--border);
+		background: var(--panel);
+		padding: 4px 10px;
+		border-radius: 999px;
+	}
+
+	.content :global(p) {
+		line-height: 1.7;
+	}
+
+	.content :global(a) {
+		color: var(--link);
+	}
+
+	.content :global(code) {
+		font-family:
+			ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
+			monospace;
+		font-size: 0.95em;
+		background: color-mix(in srgb, var(--panel) 90%, var(--text) 10%);
+		border: 1px solid var(--border);
+		padding: 0.1em 0.3em;
+		border-radius: 6px;
+	}
+
+	.content :global(pre) {
+		overflow: auto;
+		padding: 14px 16px;
+		border-radius: 14px;
+		border: 1px solid var(--border);
+		background: var(--panel);
+	}
+
+	.content :global(pre code) {
+		border: 0;
+		background: transparent;
+		padding: 0;
+	}
+</style>
+

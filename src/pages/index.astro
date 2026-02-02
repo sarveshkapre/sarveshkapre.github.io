@@ -1,11 +1,64 @@
 ---
-import Welcome from '../components/Welcome.astro';
+import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
+import PostCard from '../components/PostCard.astro';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const posts = await getCollection('blog', ({ data }) => import.meta.env.DEV || !data.draft);
+posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const latest = posts.slice(0, 3);
 ---
 
-<Layout>
-	<Welcome />
+<Layout title="Sarvesh Kapre" description="Writing about what I’m building and learning.">
+	<h1>Hi, I’m Sarvesh.</h1>
+	<p class="lede">I write about what I’m building and learning.</p>
+
+	<section class="section">
+		<div class="row">
+			<h2 class="h2">Latest posts</h2>
+			<a class="more" href="/blog/">View all</a>
+		</div>
+		<ul class="list">
+			{latest.map((post) => <PostCard post={post} />)}
+		</ul>
+	</section>
 </Layout>
+
+<style>
+	.lede {
+		margin: 0 0 18px;
+		color: var(--muted);
+	}
+
+	.section {
+		margin-top: 22px;
+	}
+
+	.row {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 16px;
+		margin-bottom: 10px;
+	}
+
+	.h2 {
+		margin: 0;
+		font-size: 18px;
+	}
+
+	.more {
+		color: var(--muted);
+		text-decoration: none;
+	}
+
+	.more:hover {
+		color: var(--text);
+	}
+
+	.list {
+		display: grid;
+		gap: 12px;
+		padding: 0;
+		margin: 0;
+	}
+</style>
