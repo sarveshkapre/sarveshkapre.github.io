@@ -1,6 +1,13 @@
 ---
 import { Icon } from "astro-icon/components";
 
+type Props = {
+	variant?: "default" | "compact";
+};
+
+const { variant = "default" } = Astro.props as Props;
+const iconClass = variant === "compact" ? "h-6 w-6" : "h-8 w-8";
+
 /** 
 	Uses https://www.astroicon.dev/getting-started/
 	Find icons via guide: https://www.astroicon.dev/guides/customization/#open-source-icon-sets
@@ -17,11 +24,21 @@ const socialLinks: {
 		link: "https://github.com/sarveshkapre",
 		name: "mdi:github",
 	},
+	{
+		friendlyName: "LinkedIn",
+		link: "https://www.linkedin.com/in/sarveshkapre",
+		name: "mdi:linkedin",
+	},
+	{
+		friendlyName: "X",
+		link: "https://x.com/_cyberhusky",
+		name: "mdi:twitter",
+	},
 ];
 ---
 
 <div class="flex flex-wrap items-end gap-x-2">
-	<p>Find me on</p>
+	{variant === "default" ? <p>Find me on</p> : null}
 	<ul class="flex flex-1 items-center gap-x-2 sm:flex-initial">
 		{
 			socialLinks.map(({ friendlyName, isWebmention, link, name }) => (
@@ -32,7 +49,7 @@ const socialLinks: {
 						rel={`noreferrer ${isWebmention ? "me authn" : ""}`}
 						target="_blank"
 					>
-						<Icon aria-hidden="true" class="h-8 w-8" focusable="false" name={name} />
+						<Icon aria-hidden="true" class={iconClass} focusable="false" name={name} />
 						<span class="sr-only">{friendlyName}</span>
 					</a>
 				</li>
