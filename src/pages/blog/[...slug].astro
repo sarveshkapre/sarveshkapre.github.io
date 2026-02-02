@@ -2,6 +2,7 @@
 import type { CollectionEntry } from 'astro:content';
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
+import TagPill from '../../components/TagPill.astro';
 
 export async function getStaticPaths() {
 	const posts = await getCollection('blog', ({ data }) => import.meta.env.DEV || !data.draft);
@@ -28,7 +29,9 @@ const published = new Intl.DateTimeFormat('en-US', { dateStyle: 'long' }).format
 			{post.data.tags.length > 0 ? (
 				<ul class="tags">
 					{post.data.tags.map((tag) => (
-						<li class="tag">{tag}</li>
+						<li class="tag">
+							<TagPill tag={tag} />
+						</li>
 					))}
 				</ul>
 			) : null}
@@ -72,11 +75,5 @@ const published = new Intl.DateTimeFormat('en-US', { dateStyle: 'long' }).format
 
 	.tag {
 		list-style: none;
-		font-size: 12px;
-		color: var(--muted);
-		border: 1px solid var(--border);
-		background: var(--panel);
-		padding: 4px 10px;
-		border-radius: 999px;
 	}
 </style>

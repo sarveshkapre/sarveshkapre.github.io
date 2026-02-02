@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import TagPill from './TagPill.astro';
 
 type Props = {
 	post: CollectionEntry<'blog'>;
@@ -11,11 +12,22 @@ const published = new Intl.DateTimeFormat('en-US', { dateStyle: 'medium' }).form
 ---
 
 <li class="card">
-	<a class="link" href={`/blog/${post.slug}/`}>
-		<h2 class="title">{post.data.title}</h2>
+	<article class="inner">
+		<h2 class="title">
+			<a class="titleLink" href={`/blog/${post.slug}/`}>{post.data.title}</a>
+		</h2>
 		<p class="meta">{published}</p>
+		{post.data.tags.length > 0 ? (
+			<ul class="tags">
+				{post.data.tags.map((tag) => (
+					<li class="tagItem">
+						<TagPill tag={tag} />
+					</li>
+				))}
+			</ul>
+		) : null}
 		<p class="desc">{post.data.description}</p>
-	</a>
+	</article>
 </li>
 
 <style>
@@ -23,20 +35,17 @@ const published = new Intl.DateTimeFormat('en-US', { dateStyle: 'medium' }).form
 		list-style: none;
 	}
 
-	.link {
-		display: block;
+	.inner {
 		padding: 14px 16px;
 		border: 1px solid var(--border);
 		border-radius: 14px;
-		text-decoration: none;
-		color: inherit;
 		background: var(--panel);
 		transition:
 			border-color 0.15s ease,
 			transform 0.15s ease;
 	}
 
-	.link:hover {
+	.inner:hover {
 		border-color: color-mix(in srgb, var(--border) 55%, var(--text) 45%);
 		transform: translateY(-1px);
 	}
@@ -47,10 +56,33 @@ const published = new Intl.DateTimeFormat('en-US', { dateStyle: 'medium' }).form
 		letter-spacing: -0.01em;
 	}
 
+	.titleLink {
+		color: inherit;
+		text-decoration: none;
+	}
+
+	.titleLink:hover {
+		text-decoration: underline;
+		text-decoration-thickness: 1px;
+		text-underline-offset: 3px;
+	}
+
 	.meta {
 		margin: 0 0 10px;
 		font-size: 13px;
 		color: var(--muted);
+	}
+
+	.tags {
+		display: flex;
+		gap: 8px;
+		flex-wrap: wrap;
+		padding: 0;
+		margin: 0 0 10px;
+	}
+
+	.tagItem {
+		list-style: none;
 	}
 
 	.desc {
@@ -59,4 +91,3 @@ const published = new Intl.DateTimeFormat('en-US', { dateStyle: 'medium' }).form
 		line-height: 1.5;
 	}
 </style>
-

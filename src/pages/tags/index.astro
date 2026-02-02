@@ -1,0 +1,56 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import TagPill from '../../components/TagPill.astro';
+import { tagToSlug } from '../../lib/tags';
+
+const posts = await getCollection('blog', ({ data }) => import.meta.env.DEV || !data.draft);
+const allTags = new Set<string>();
+for (const post of posts) {
+	for (const tag of post.data.tags) allTags.add(tag);
+}
+
+const tags = [...allTags].sort((a, b) => a.localeCompare(b));
+---
+
+<Layout title="Tags" description="Browse posts by tag.">
+	<h1>Tags</h1>
+	{tags.length === 0 ? <p class="empty">No tags yet.</p> : null}
+
+	<ul class="list">
+		{tags.map((tag) => (
+			<li class="item">
+				<TagPill tag={tag} />
+				<span class="slug">/tags/{tagToSlug(tag)}/</span>
+			</li>
+		))}
+	</ul>
+</Layout>
+
+<style>
+	.empty {
+		color: var(--muted);
+		margin: 0;
+	}
+
+	.list {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 10px;
+		padding: 0;
+		margin: 16px 0 0;
+	}
+
+	.item {
+		list-style: none;
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+	}
+
+	.slug {
+		font-size: 12px;
+		color: var(--muted);
+	}
+</style>
+
