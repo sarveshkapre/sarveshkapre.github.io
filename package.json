@@ -44,6 +44,7 @@
 		"@astrojs/check": "^0.9.6",
 		"@biomejs/biome": "^2.3.8",
 		"@iconify-json/mdi": "^1.2.2",
+		"@iconify-json/simple-icons": "^1.2.69",
 		"@pagefind/default-ui": "^1.4.0",
 		"@resvg/resvg-js": "^2.6.2",
 		"@tailwindcss/typography": "^0.5.19",
